@@ -1,0 +1,6 @@
+{
+  "0": {
+    "images": ["data/core_images"],
+    "latents": ["data/core_images_latents"]
+  }
+}

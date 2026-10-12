@@ -1,0 +1,10 @@
+# Generated experiment outputs are recreated by the notebooks.
+*_results/
+*_test_results/
+*.npy
+*.npz
+fid_*.json
+*.raw
+*.dat
+*.bin
+*.img

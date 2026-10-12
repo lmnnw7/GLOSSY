@@ -1,0 +1,9 @@
+{
+  "axis_order": "XYZ",
+  "shape": [128, 128, 128],
+  "dtype": "uint16",
+  "byte_order": "little",
+  "value_range": [0, 65535],
+  "spacing": [1.03, 1.03, 1.03],
+  "spacing_unit": "um"
+}

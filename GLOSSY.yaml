@@ -1,0 +1,8 @@
+name: GLOSSY
+channels:
+  - defaults
+dependencies:
+  - python=3.11.11
+  - pip
+  - pip:
+      - -r requirements-cu121.txt

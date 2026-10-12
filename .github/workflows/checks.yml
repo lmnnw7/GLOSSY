@@ -1,0 +1,41 @@
+name: Source and CPU regression checks
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - name: Install CPU PyTorch
+        run: python -m pip install torch==2.2.0 torchvision==0.17.0 --index-url https://download.pytorch.org/whl/cpu
+      - name: Install dependencies
+        run: python -m pip install -r requirements.txt
+      - name: Check dependency compatibility
+        run: python -m pip check
+      - name: Check source
+        run: python tools/check_source.py
+      - name: Run CPU regression tests
+        run: python -m unittest discover -s tests -v
+      - name: Check public command entry points
+        run: |
+          python train/train_REV_VQVAE.py --help
+          python train/train_REV_VQVAE_stage2.py --help
+          python train/generate_training_latent.py --help
+          python train/train_MSP_DiffNet_SingleRes.py --help
+          python evaluation/generate.py --help
+          python evaluation/ae_encode_decode_recon.py --help
+          python evaluation/ae_reconstruction_check.py --help
+          python evaluation/compare_vae.py --help
+          python evaluation/digital_core/fid_3d.py --help
+          python evaluation/digital_core/s2_pore_phase.py --help
+          python tools/check_vae_training.py --help
+          python tools/check_checkpoints.py --help
+          python preprocessing/core_subvolume_extraction.py --help
+          python preprocessing/prepare_core_blocks.py --help
+          python evaluation/check_diffusion_latents.py --help

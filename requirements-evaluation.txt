@@ -1,0 +1,8 @@
+# Optional dependencies for the imported digital-core experiment notebooks.
+-r requirements.txt
+matplotlib
+seaborn
+scikit-learn
+scikit-image==0.25.0
+notebook
+ipykernel
