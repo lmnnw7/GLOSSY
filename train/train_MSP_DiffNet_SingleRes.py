@@ -21,11 +21,11 @@ from torch.utils.data import DataLoader, DistributedSampler
 from dataset.Singleres_dataset import Singleres_dataset
 from ddpm.MSP_DiffNet import MSP_DiffNet, GaussianDiffusion
 from ddpm.factory import add_model_arguments, model_config, diffusion_config, codebook_digest
-from runtime import load_autoencoder, decode_latent, denormalize_latent
+from utils.runtime import load_autoencoder, decode_latent, denormalize_latent
 from evaluation.volume_output import save_volume
-from sampling_config import (add_sampling_arguments, resolve_sampling_options,
+from utils.sampling_config import (add_sampling_arguments, resolve_sampling_options,
                              decode_options, validate_decode_settings)
-from config_io import validate_latent_metadata
+from utils.config_io import validate_latent_metadata
 
 
 @torch.no_grad()
@@ -94,9 +94,7 @@ def _train(args, device, rank, world_size, distributed):
     if not args.disable_ckpt_sampling:
         validate_decode_settings((1, ae.embedding_dim, *args.resolution), ratios, **preview_decoding)
     if args.sub_volume_size is None:
-        if any(args.vq_size % r for r in ratios):
-            raise ValueError('vq-size must be divisible by the VAE compression ratios')
-        args.sub_volume_size = [args.vq_size // r for r in ratios]
+        args.sub_volume_size = [8, 8, 8]
     cfg, dcfg = model_config(args), diffusion_config(args)
     network = MSP_DiffNet(**cfg).to(device)
     if any(n % d for n, d in zip(args.resolution, network.spatial_divisor)):
@@ -221,22 +219,23 @@ def _train(args, device, rank, world_size, distributed):
 
 def build_parser():
     parser = argparse.ArgumentParser(description=__doc__)
+    # Shared model and diffusion options (including --patch-size) are defined in ddpm/factory.py.
     add_model_arguments(parser)
     parser.add_argument('--data-path', required=True, help='Actual latent directory/file or optional JSON mapping')
     parser.add_argument('--class-id', type=int, default=0, help='Class label for a direct latent directory/file')
     parser.add_argument('--results-dir', required=True)
     parser.add_argument('--AE-ckpt', required=True)
-    parser.add_argument('--resolution', nargs=3, type=int, default=[16, 16, 16], help='Latent D H W, not output voxel size')
+    parser.add_argument('--resolution', nargs=3, type=int, default=[32, 32, 32], help='Latent D H W, not output voxel size')
     parser.add_argument('--batch-size', type=int, default=1, help='Batch size per GPU')
     parser.add_argument('--epochs', type=int, default=5000)
     parser.add_argument('--lr', type=float, default=1e-4)
     parser.add_argument('--global-seed', type=int, default=0)
-    parser.add_argument('--num-workers', type=int, default=8)
+    parser.add_argument('--num-workers', type=int, default=16)
     parser.add_argument('--enable-amp', '--enable_amp', action=argparse.BooleanOptionalAction, default=True)
     parser.add_argument('--log-every', type=int, default=50)
     parser.add_argument('--ckpt-every', type=int, default=500)
     parser.add_argument('--ckpt')
-    parser.add_argument('--model', default='MSP-DiffNet', help='Compatibility label')
+    parser.add_argument('--model', default='MSP_DiffNet', help='Compatibility label')
     parser.add_argument('--disable-ckpt-sampling', action='store_true')
     add_sampling_arguments(parser, preview=True)
     parser.add_argument('--sample-save-format', choices=['raw', 'nii.gz', 'both'], default='raw')

@@ -1,8 +1,48 @@
+# Server environment: Python 3.11 and NVIDIA CUDA 12.1 wheels.
+# Includes training, generation, evaluation and notebook dependencies.
 name: GLOSSY
 channels:
   - defaults
 dependencies:
   - python=3.11.11
-  - pip
+  - pip=24.2
+  - setuptools=75.1.0
+  - wheel=0.44.0
   - pip:
-      - -r requirements-cu121.txt
+      - --extra-index-url https://download.pytorch.org/whl/cu121
+      - numpy==1.26.3
+      - torch==2.2.0+cu121
+      - torchvision==0.17.0+cu121
+      - pytorch-lightning==2.5.0.post0
+      - torchmetrics==1.6.1
+      - torchio==0.20.3
+      - nibabel==5.3.2
+      - SimpleITK==2.4.0
+      - scipy==1.15.1
+      - omegaconf==2.3.0
+      - PyYAML==6.0.2
+      - einops==0.8.0
+      - einops-exts==0.0.4
+      - timm==1.0.14
+      - tensorboard==2.18.0
+      - pillow==10.2.0
+      - tqdm==4.67.1
+      - requests==2.32.3
+      - gdown==5.2.0
+      - matplotlib==3.9.4
+      - seaborn==0.13.2
+      - pandas==2.2.3
+      - scikit-learn==1.6.1
+      - scikit-image==0.25.0
+      - notebook==7.3.2
+      - ipykernel==6.29.5
+      # Compatibility versions retained from the supplied environment.
+      - sympy==1.13.1
+      - fsspec==2024.2.0
+      - lightning-utilities==0.11.9
+      - protobuf==3.20.1
+      - networkx==3.2.1
+      - huggingface-hub==0.27.1
+      - safetensors==0.5.2
+      - packaging==24.2
+      - typing-extensions==4.12.2

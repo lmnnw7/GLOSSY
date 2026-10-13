@@ -5,10 +5,28 @@ the convention expected by the GLOSSY image loader. Intensities are unchanged.
 """
 import argparse
 import csv
+import hashlib
 from itertools import product
 from pathlib import Path
 
 import numpy as np
+
+
+def write_manifest(path, rows):
+    """Record block filenames, source coordinates and sizes without altering data."""
+    with Path(path).open('w', encoding='utf-8', newline='') as stream:
+        writer = csv.DictWriter(stream, fieldnames=list(rows[0]))
+        writer.writeheader()
+        writer.writerows(rows)
+
+
+def source_sha256(path):
+    """Identify a source RAW file without loading it into memory."""
+    digest = hashlib.sha256()
+    with Path(path).open('rb') as stream:
+        for chunk in iter(lambda: stream.read(8 * 1024 * 1024), b''):
+            digest.update(chunk)
+    return digest.hexdigest()
 
 
 def _source(path, shape, dtype, byte_order, storage_order):
@@ -115,10 +133,7 @@ def main(args):
         print(f'Saved XYZ crop: {args.output}; shape={shape}')
     else:
         rows = extract_subvolumes(args.input, args.output, args.shape, args.block_shape, args.stride, **options)
-        with (Path(args.output) / 'blocks.csv').open('w', encoding='utf-8', newline='') as stream:
-            writer = csv.DictWriter(stream, fieldnames=list(rows[0]))
-            writer.writeheader()
-            writer.writerows(rows)
+        write_manifest(Path(args.output) / 'blocks.csv', rows)
         print(f'Saved {len(rows)} XYZ blocks in {args.output}; original intensities and byte order retained')
 
 

@@ -10,11 +10,11 @@ current_dir = os.path.dirname(os.path.abspath(__file__))
 project_root = os.path.abspath(os.path.join(current_dir, ".."))
 sys.path.append(project_root)
 
-from runtime import load_autoencoder, resolve_device, decode_latent
-from config_io import image_roots, add_raw_arguments, raw_options
+from utils.runtime import load_autoencoder, resolve_device, decode_latent
+from utils.config_io import image_roots, add_raw_arguments, raw_options
 from dataset.io_utils import to_model_tensor, to_storage_tensor
 from dataset.io_utils import collect_volume_files, load_raw_meta, load_scalar_image, save_raw_volume, to_nii_gz_path
-from sampling_config import add_sampling_arguments, resolve_sampling_options, decode_options
+from utils.sampling_config import add_sampling_arguments, resolve_sampling_options, decode_options
 
 
 def _pcts(tensor, probs=(0.01, 0.5, 0.99), max_elements: int = 4_000_000):

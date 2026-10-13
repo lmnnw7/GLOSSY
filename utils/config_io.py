@@ -4,7 +4,7 @@ import math
 import os
 from pathlib import Path
 
-PROJECT_ROOT = Path(__file__).resolve().parent
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
 RAW_DTYPES = {'uint16': 'uint16', 'u16': 'uint16', 'int16': 'int16',
               'i16': 'int16', 'float32': 'float32', 'f32': 'float32'}
 RAW_BYTE_ORDERS = {'little': 'little', 'le': 'little', 'l': 'little',

@@ -340,7 +340,7 @@ class MSP_DiffNet(nn.Module):
         cond_dim=None,
         dim_mults=(1, 1, 2, 4, 8),
         sub_volume_size = (8,8,8),
-        patch_size = 2,
+        patch_size = 1,
         channels=3,
         attn_heads=8,#
         init_dim=None,

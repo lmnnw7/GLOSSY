@@ -9,9 +9,9 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 import numpy as np
 import torch
 from ddpm.factory import add_model_arguments, from_checkpoint, codebook_digest
-from runtime import resolve_device, load_autoencoder, decode_latent, denormalize_latent
+from utils.runtime import resolve_device, load_autoencoder, decode_latent, denormalize_latent
 from evaluation.volume_output import save_volume
-from sampling_config import (add_sampling_arguments, resolve_sampling_options,
+from utils.sampling_config import (add_sampling_arguments, resolve_sampling_options,
                              decode_options, validate_decode_settings)
 
 

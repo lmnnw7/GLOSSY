@@ -6,7 +6,7 @@ from torch.utils.data.dataset import Dataset
 import torchio as tio
 
 from dataset.io_utils import collect_volume_files, load_scalar_image
-from config_io import image_roots
+from utils.config_io import image_roots
 
 
 def split_volume_files(files, split, validation_count=None, seed=216):

@@ -1,7 +1,7 @@
 """Shared checkpoint, device and latent-scaling helpers."""
 import torch
-from config_io import PROJECT_ROOT, project_path
-from sampling_config import validate_decode_settings
+from utils.config_io import PROJECT_ROOT, project_path
+from utils.sampling_config import validate_decode_settings
 
 
 def resolve_device(name='auto'):

@@ -8,8 +8,8 @@ import sys
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 import torch
 from dataset.io_utils import collect_volume_files, load_scalar_image, to_model_tensor
-from runtime import load_autoencoder, resolve_device
-from config_io import add_raw_arguments, raw_options
+from utils.runtime import load_autoencoder, resolve_device
+from utils.config_io import add_raw_arguments, raw_options
 
 
 def reconstruction_metrics(source, reconstruction, pore_threshold=None):

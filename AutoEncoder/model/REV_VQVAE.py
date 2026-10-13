@@ -6,7 +6,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 from einops import rearrange
 from AutoEncoder.utils import shift_dim
-from sampling_config import validate_decode_settings
+from utils.sampling_config import validate_decode_settings
 from AutoEncoder.model.lpips import LPIPS
 from AutoEncoder.model.codebook import Codebook
 from AutoEncoder.model.VolumetricPerceptualLoss import VolumetricPerceptualLoss

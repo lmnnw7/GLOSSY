@@ -12,8 +12,8 @@ current_dir = os.path.dirname(os.path.abspath(__file__))
 project_root = os.path.abspath(os.path.join(current_dir, ".."))
 sys.path.append(project_root)
 
-from runtime import load_autoencoder
-from config_io import add_raw_arguments, raw_options
+from utils.runtime import load_autoencoder
+from utils.config_io import add_raw_arguments, raw_options
 from dataset.io_utils import to_model_tensor, to_storage_tensor
 from dataset.io_utils import collect_volume_files, load_raw_meta, load_scalar_image, save_raw_volume
 

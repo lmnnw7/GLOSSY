@@ -10,14 +10,14 @@ DEFAULT_PROJECT = Path(__file__).resolve().parents[1]
 
 def main(args):
     project = Path(args.project_root).expanduser().resolve()
-    if not (project / 'runtime.py').is_file():
+    if not (project / 'utils' / 'runtime.py').is_file():
         raise FileNotFoundError('Set --project-root to the GLOSSY repository root')
     sys.path.insert(0, str(project))
     import torch
-    from config_io import validate_latent_metadata
+    from utils.config_io import validate_latent_metadata
     from dataset.Singleres_dataset import Singleres_dataset
     from ddpm.factory import from_checkpoint, codebook_digest
-    from runtime import load_autoencoder, resolve_device
+    from utils.runtime import load_autoencoder, resolve_device
 
     if args.max_samples <= 0:
         raise ValueError('max-samples must be positive')

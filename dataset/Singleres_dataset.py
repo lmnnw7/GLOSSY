@@ -3,7 +3,7 @@ from pathlib import Path
 import torch
 from torch.utils.data import Dataset
 from dataset.io_utils import collect_volume_files, load_scalar_image, to_model_tensor
-from config_io import project_path, read_data_roots
+from utils.config_io import project_path, read_data_roots
 
 
 class Singleres_dataset(Dataset):

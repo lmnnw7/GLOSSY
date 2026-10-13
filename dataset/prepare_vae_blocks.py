@@ -1,7 +1,5 @@
-"""Split a uint16 C-order XYZ RAW core for the server smoke workflow."""
+"""Prepare non-overlapping uint16 RAW blocks and file partitions for VAE training."""
 import argparse
-import csv
-import hashlib
 from itertools import product
 from pathlib import Path
 import random
@@ -11,7 +9,7 @@ import sys
 import numpy as np
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from preprocessing.core_subvolume_extraction import extract_subvolumes
+from dataset.core_subvolume_extraction import extract_subvolumes, source_sha256, write_manifest
 
 
 def prepare(args):
@@ -62,15 +60,8 @@ def prepare(args):
             shutil.copyfile(canonical, folders['vae_pool'] / name)
         shutil.copyfile(canonical, folders[split] / name)
         rows.append(dict(file=name, split=split, x=x, y=y, z=z, block_size=side))
-    with (destination / 'split.csv').open('w', encoding='utf-8', newline='') as stream:
-        writer = csv.DictWriter(stream, fieldnames=['file', 'split', 'x', 'y', 'z', 'block_size'])
-        writer.writeheader()
-        writer.writerows(rows)
-    digest_state = hashlib.sha256()
-    with source.open('rb') as stream:
-        for chunk in iter(lambda: stream.read(8 * 1024 * 1024), b''):
-            digest_state.update(chunk)
-    digest = digest_state.hexdigest()
+    write_manifest(destination / 'split.csv', rows)
+    digest = source_sha256(source)
     (destination / 'source.txt').write_text(
         f'source={source}\nsha256={digest}\nshape={shape}\ndtype={dtype.str}\nsource_order={storage_order}\naxis_order=XYZ\n'
         f'block_size={side}\nvalidation_count={args.validation_count}\nsplit_seed={args.seed}\n'
@@ -87,7 +78,7 @@ def build_parser():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--input', required=True, help='One headerless uint16 RAW file')
     parser.add_argument('--output-root', required=True, help='New directory; existing directories are rejected')
-    parser.add_argument('--shape', nargs=3, type=int, default=[256, 256, 256], help='Storage X Y Z dimensions')
+    parser.add_argument('--shape', nargs=3, type=int, default=[256, 256, 256], help='Source dimensions in storage-order')
     parser.add_argument('--block-size', type=int, default=64)
     parser.add_argument('--byte-order', choices=['little', 'big'], default='little')
     parser.add_argument('--storage-order', choices=['XYZ', 'ZYX'], default='XYZ', help='Source shape/bytes convention; output is XYZ')

@@ -6,7 +6,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 import pytorch_lightning as pl
 from AutoEncoder.model.REV_VQVAE import REV_VQVAE
-from config_io import add_vae_input_arguments, vae_input_options
+from utils.config_io import add_vae_input_arguments, vae_input_options
 from train.vae_training import (build_data_loaders, build_trainer, print_training_settings,
                                 load_config, load_training_checkpoint, checkpoint_stage)
 

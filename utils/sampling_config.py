@@ -19,7 +19,7 @@ def add_sampling_arguments(parser, preview=False, include_sampling=True, allow_a
     prefix = 'sample-' if preview else ''
     if include_sampling:
         parser.add_argument(f'--{prefix}sampling-strategy', choices=['ddpm', 'ddim'],
-                            default='ddim' if preview else SAMPLING_DEFAULTS['strategy'])
+                            default=SAMPLING_DEFAULTS['strategy'])
         flags = [f'--{prefix}ddim-steps']
         if not preview:
             flags.append('--ddim_steps')
@@ -41,7 +41,7 @@ def resolve_sampling_options(args, preview=False, include_sampling=True, allow_a
     prefix = 'sample_' if preview else ''
     defaults = {f'decode_{name}': value for name, value in DECODE_DEFAULTS.items()}
     if include_sampling:
-        defaults.update(sampling_strategy='ddim' if preview else SAMPLING_DEFAULTS['strategy'],
+        defaults.update(sampling_strategy=SAMPLING_DEFAULTS['strategy'],
                         ddim_steps=SAMPLING_DEFAULTS['ddim_steps'], eta=SAMPLING_DEFAULTS['eta'])
     for name, default in defaults.items():
         attribute = prefix + name

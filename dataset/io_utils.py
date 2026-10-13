@@ -6,7 +6,7 @@ from typing import Iterable, List
 import numpy as np
 import torch
 import torchio as tio
-from config_io import load_json_object, validate_raw_meta, RAW_BYTE_ORDERS
+from utils.config_io import load_json_object, validate_raw_meta, RAW_BYTE_ORDERS
 
 
 SUPPORTED_VOLUME_PATTERNS = ("*.nii.gz", "*.raw")

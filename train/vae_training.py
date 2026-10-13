@@ -10,7 +10,7 @@ from pytorch_lightning.strategies import DDPStrategy
 from torch.utils.data import DataLoader
 
 from dataset.core_volume import CoreVolumeDataset, CoreVolumeDataset4x
-from runtime import project_path
+from utils.runtime import project_path
 from train.callbacks import VolumeLogger
 
 

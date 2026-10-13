@@ -8,10 +8,10 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 import torch
 import torchio as tio
-from config_io import read_data_roots, add_raw_arguments, raw_options
+from utils.config_io import read_data_roots, add_raw_arguments, raw_options
 from dataset.io_utils import collect_volume_files, load_scalar_image, to_model_tensor
 from ddpm.factory import codebook_digest
-from runtime import project_path, resolve_device, load_autoencoder, normalize_latent
+from utils.runtime import project_path, resolve_device, load_autoencoder, normalize_latent
 
 
 @torch.inference_mode()
@@ -107,10 +107,10 @@ if __name__ == '__main__':
     parser.add_argument('--AE-ckpt', required=True)
     parser.add_argument('--device', choices=['auto', 'cuda', 'cpu'], default='auto')
     parser.add_argument('--patch-size', type=int, default=64)
-    parser.add_argument('--patch-batch-size', '--batch-size', type=int, default=1)
-    parser.add_argument('--num-workers', type=int, default=0, help='Compatibility argument; export iterates volumes serially')
-    parser.add_argument('--quantize', action=argparse.BooleanOptionalAction, default=True,
-                        help='Discrete latents match the manuscript; --no-quantize retains the previous export convention')
+    parser.add_argument('--patch-batch-size', '--batch-size', type=int, default=2)
+    parser.add_argument('--num-workers', type=int, default=16, help='Compatibility argument; export iterates volumes serially')
+    parser.add_argument('--quantize', action=argparse.BooleanOptionalAction, default=False,
+                        help='Continuous latents retain the original export; --quantize selects codebook embeddings')
     parser.add_argument('--output-root', help='Optional output directory, organized by class and source root')
     parser.add_argument('--manifest', help='Optional output JSON mapping; directory input does not need it')
     parser.add_argument('--overwrite', action='store_true')

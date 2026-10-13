@@ -8,11 +8,11 @@ model:
   log_max_volumes: 4
 
   gpus: 1
-  default_root_dir: input/your/results/dir
-  resume_from_checkpoint: input/stage1/checkpoint/path
+  default_root_dir: results/vae4x_stage2
+  resume_from_checkpoint: results/vae4x_stage1/checkpoints/stage1-final.ckpt
   max_steps: 1000000
   max_epochs: 10000
-  precision: bf16-mixed
+  precision: bf16
 
   perceptual_3d: False  
   embedding_dim: 8
