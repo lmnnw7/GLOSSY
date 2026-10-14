@@ -76,9 +76,12 @@ python dataset/prepare_diffusion_blocks.py \
 ```bash
 python train/generate_training_latent.py \
   --data-path data/diffusion128 --AE-ckpt results/vae8x_stage2/checkpoints/stage2-final.ckpt \
+  --batch-size 2 --num-workers 16 \
   --raw-shape 128 128 128 --raw-dtype uint16 --raw-byte-order little \
   --raw-value-range 0 65535 --raw-spacing 1 1 1 --raw-spacing-unit um
 ```
+
+Export uses the original full-volume batching: `--batch-size 2` loads two complete, equally sized input volumes, transfers them to the selected device, and encodes all their 64³ patches together. `--num-workers` controls DataLoader workers. Each input volume produces its own complete latent file. The earlier `--patch-batch-size` option has been removed.
 
 **Train the diffusion model**
 
